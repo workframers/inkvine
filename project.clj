@@ -9,17 +9,16 @@
                  [com.walmartlabs/lacinia "0.24.0-rc-1"]
                  [clojure.java-time "0.3.1"]
                  [org.clojure/tools.logging "0.4.0"]
-                 [org.apache.logging.log4j/log4j-core "2.10.0"]
-                 [org.apache.logging.log4j/log4j-slf4j-impl "2.10.0"]]
-
-  :min-lein-version "2.8.1"
+                 [camel-snake-kebab "0.4.0"]]
 
   :source-paths ["src"]
 
   :test-selectors {:watch :watch}
 
   :profiles {:dev  {:plugins      [[lein-ancient "0.6.15"]
-                                   ;[venantius/ultra "0.5.2" :exclusions [org.clojure/clojure]]
                                    [com.jakemccrary/lein-test-refresh "0.22.0"]]
-                    :dependencies [[vvvvalvalval/datomock "0.2.0"]]}
+                    :dependencies [[io.forward/yaml "1.0.6"]
+                                   [org.apache.logging.log4j/log4j-core "2.10.0"]
+                                   [org.apache.logging.log4j/log4j-slf4j-impl "2.10.0"]]}
+
              :test {:resource-paths ["test/resources"]}})
