@@ -7,6 +7,5 @@
    :serialize   (schema/as-conformer #(.toString %))
    :description "A java.time.OffSetDateTime object, serialized as a string"})
 
-(defn attach-scalars [schema {:keys [:inkvine/scalar-name] :as options}]
+(defn assoc-scalars [schema {:keys [:inkvine/scalar-name] :as options}]
   (assoc-in schema [:scalars scalar-name] (scalar-spec)))
-

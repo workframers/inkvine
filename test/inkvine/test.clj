@@ -18,19 +18,10 @@
       yaml/parse-string
       (get-in [:queries qname])))
 
-(def base-schema
-  {:queries
-   {:now
-    {:type    (:inkvine/object-name inkvine/default-options)
-     :args    {}
-     :resolve :inkvine-test/now-obj}
-    :nowScalar
-    {:type    (:inkvine/scalar-name inkvine/default-options)
-     :args    {}
-     :resolve :inkvine-test/now-scalar}}})
-
-(defn now-obj-resolver [c a v]
-  (resolve/resolve-as (jt/offset-date-time)))
+(def now-obj-resolver
+  ^resolve/ResolverResult
+  (fn now-obj [c a v]
+    (resolve/resolve-as (jt/offset-date-time))))
 
 (defn now-scalar-resolver [c a v]
   (jt/offset-date-time))
@@ -40,7 +31,7 @@
    :inkvine-test/now-scalar now-scalar-resolver})
 
 (defn setup-schema []
-  (-> base-schema
+  (-> {}
       (inkvine/decorate {})
       (util/attach-resolvers (inkvine/decorate-resolver-map resolver-map))
       (schema/compile)))
@@ -49,10 +40,14 @@
   (lacinia/execute schema (get-query query-name) nil nil))
 
 (deftest objects
-  (testing "Send and receive Date scalars"
-    (let [schema (setup-schema)
-          result (execute schema :basic)]
-      ;(log/spy (inkvine/decorate-resolver-map resolver-map))
-      ;(log/spy (-> base-schema (inkvine/decorate {})))
-      (log/spy result))))
+  (let [schema (setup-schema)]
+
+    (testing "Send and receive Date scalars"
+      (let [result (execute schema :basic)
+            data   (get-in result [:data :inkvine_now])]
+        (log/spy result)
+        (is (some? (:epoch data)))
+        (is (some? (:toString data)))))
+
+    (testing "Pattern")))
 

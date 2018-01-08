@@ -3,7 +3,7 @@
 queries:
   basic: |-
     {
-      now {
+      inkvine_now {
         epoch
         toString
       }

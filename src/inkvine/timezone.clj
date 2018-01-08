@@ -31,6 +31,6 @@
     {:description "A timezone identifier"
      :values      values}))
 
-(defn attach-timezone-enums [schema options]
+(defn assoc-timezone-enums [schema options]
   (let [enum-name (:inkvine/timezone-enum-name options)]
     (assoc-in schema [:enums enum-name] (timezone-enums (enum-to-timezones)))))
