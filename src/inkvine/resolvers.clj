@@ -17,47 +17,60 @@
      :resolve     :inkvine/to-string
      :description "ISO-8601 format of the date"}
     :epoch
-    {:type        '(non-null String)
+    {:type        '(non-null Int)
      :resolve     :inkvine/epoch
-     :description "Seconds since the epoch. Returned as a String since it is generally larger than 32 bits."}
+     :description "True if the year of this date is a leap year."}
+    :isLeapYear
+    {:type        '(non-null Boolean)
+     :resolve     :inkvine/leap?
+     :description "Seconds since the epoch. Note that due to Int overflow, dates past 2038 will return errors."}
+    :epochMilliseconds
+    {:type        '(non-null String)
+     :resolve     :inkvine/epoch-ms
+     :description "Milliseconds since the epoch. Returned as a String since it is generally larger than 32 bits."}
     :format
     {:type        'String
      :resolve     :inkvine/format
      :args        {:pattern
-                   {:type '(non-null String)}
+                   {:type '(non-null String)
+                    :description (str "An output pattern. See [the DateTimeFormatter docs]"
+                                      "(https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns)"
+                                      " for details.")}
                    :tz
                    {:type `(~'non-null ~(:inkvine/timezone-enum-name options))}}
      :description "Format a string in the given timezone"}}})
 
-(defn inkvine-now-query-schema
-  [{:keys [:inkvine/object-name]}]
-  {:type    object-name
-   :args    {}
-   :resolve :inkvine-test/now-obj
-   :description "Return the current time."})
-
-(def ^ResolverResult inkvine-now-query-resolver
-  (fn inkvine-now-query-resolver-fn
-    [c a v]
-    (resolve/resolve-as (jt/offset-date-time))))
-
 (defn to-string [c a ^OffsetDateTime v]
   (.toString v))
 
-(defn epoch [c a ^OffsetDateTime v]
-  (-> v jt/to-millis-from-epoch str))
+(defn epoch-resolver
+  [c a ^OffsetDateTime v]
+  (-> v jt/to-millis-from-epoch (/ 1000) int))
+
+(def ^ResolverResult epoch-ms-resolver
+  (fn epoch-ms-resolver-fn
+    [c a ^OffsetDateTime v]
+    (-> v jt/to-millis-from-epoch str)))
+
+(def ^ResolverResult leap?-resolver
+  (fn leap?-resolver-fn
+    [c a ^OffsetDateTime v]
+    (jt/leap? v)))
 
 (defn inkvine-format [c a ^OffsetDateTime v]
-  (-> v jt/to-millis-from-epoch str))
+  (-> v jt/to-millis-from-epoch (/ 1000) int))
+
+(defn inkvine-format [c a ^OffsetDateTime v]
+  (-> v jt/to-millis-from-epoch (/ 1000) int))
 
 (defn resolver-map [{:keys [:inkvine/now-query-name]}]
   {:inkvine/to-string to-string
-   :inkvine/epoch     epoch
-   :inkvine/format    inkvine-format
-   now-query-name     inkvine-now-query-resolver})
+   :inkvine/epoch     epoch-resolver
+   :inkvine/leap?     leap?-resolver
+   :inkvine/epoch-ms  epoch-ms-resolver
+   :inkvine/format    inkvine-format})
 
 (defn assoc-resolvers [schema options]
   (let [{:keys [:inkvine/object-name :inkvine/now-query-name]} options]
     (-> schema
-        (assoc-in [:objects object-name] (inkvine-object-schema options))
-        (assoc-in [:queries now-query-name] (inkvine-now-query-schema options)))))
+        (assoc-in [:objects object-name] (inkvine-object-schema options)))))

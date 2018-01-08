@@ -32,7 +32,7 @@
 
 (defn setup-schema []
   (-> {}
-      (inkvine/decorate {})
+      inkvine/decorate-schema
       (util/attach-resolvers (inkvine/decorate-resolver-map resolver-map))
       (schema/compile)))
 
@@ -44,10 +44,9 @@
 
     (testing "Send and receive Date scalars"
       (let [result (execute schema :basic)
-            data   (get-in result [:data :inkvine_now])]
-        (log/spy result)
-        (is (some? (:epoch data)))
-        (is (some? (:toString data)))))
+            data   (get-in result [:data (:inkvine/now-query-name inkvine/default-options)])]
+        (doseq [field [:epoch :toString :epochMilliseconds :epoch :isLeapYear]]
+          (is (some? (get data field))))))
 
     (testing "Pattern")))
 
