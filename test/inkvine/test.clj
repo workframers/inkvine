@@ -33,6 +33,7 @@
 (defn setup-schema []
   (-> {}
       inkvine/decorate-schema
+      log/spy
       (util/attach-resolvers (inkvine/decorate-resolver-map resolver-map))
       (schema/compile)))
 
@@ -49,4 +50,3 @@
           (is (some? (get data field))))))
 
     (testing "Pattern")))
-

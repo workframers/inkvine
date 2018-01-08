@@ -10,7 +10,8 @@
   {:inkvine/object-name        :InkvineDateTime
    :inkvine/scalar-name        :JavaOffsetDateTime
    :inkvine/timezone-enum-name :TimezoneId
-   :inkvine/now-query-name     :inkvine_now_utc})
+   :inkvine/now-query-name     :inkvine_now_utc
+   :inkvine/tz-query-name      :inkvine_timezone})
 
 (defn decorate-resolver-map
   ([resolver-map]
