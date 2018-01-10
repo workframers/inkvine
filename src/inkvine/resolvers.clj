@@ -14,9 +14,9 @@
     {:type        '(non-null String)
      :resolve     :inkvine/to-string
      :description "ISO-8601 format of the date"}
-    :epoch
+    :epochSeconds
     {:type        '(non-null Int)
-     :resolve     :inkvine/epoch
+     :resolve     :inkvine/epoch-secs
      :description "True if the year of this date is a leap year."}
     :isLeapYear
     {:type        '(non-null Boolean)
@@ -62,11 +62,11 @@
   (-> v jt/to-millis-from-epoch (/ 1000) int))
 
 (defn resolver-map [{:keys [:inkvine/now-query-name]}]
-  {:inkvine/to-string to-string
-   :inkvine/epoch     epoch-resolver
-   :inkvine/leap?     leap?-resolver
-   :inkvine/epoch-ms  epoch-ms-resolver
-   :inkvine/format    inkvine-format})
+  {:inkvine/to-string  to-string
+   :inkvine/epoch-secs epoch-resolver
+   :inkvine/leap?      leap?-resolver
+   :inkvine/epoch-ms   epoch-ms-resolver
+   :inkvine/format     inkvine-format})
 
 (defn assoc-resolvers [schema options]
   (let [{:keys [:inkvine/object-name :inkvine/now-query-name]} options]

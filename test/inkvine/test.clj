@@ -32,9 +32,8 @@
 
 (defn setup-schema []
   (-> {}
-      inkvine/decorate-schema
-      ;log/spy
-      (util/attach-resolvers (inkvine/decorate-resolver-map resolver-map))
+      (inkvine/decorate-schema resolver-map)
+      ;(util/attach-resolvers (inkvine/decorate-resolver-map resolver-map))
       (schema/compile)))
 
 (defn execute [schema query-name]

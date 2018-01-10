@@ -9,7 +9,7 @@
 (def default-options
   {:inkvine/object-name        :InkvineDateTime
    :inkvine/scalar-name        :JavaOffsetDateTime
-   :inkvine/timezone-enum-name :TimezoneId
+   :inkvine/timezone-enum-name :InkvineTimezone
    :inkvine/now-query-name     :inkvine_now_utc
    :inkvine/tz-query-name      :inkvine_timezone})
 
@@ -23,11 +23,14 @@
 
 (defn decorate-schema
   ([schema]
-   (decorate-schema schema nil))
-  ([schema options]
+   (decorate-schema schema nil nil))
+  ([schema resolver-map]
+   (decorate-schema schema resolver-map nil))
+  ([schema resolver-map options]
    (let [with-defaults (merge default-options options)]
      (-> schema
          (resolvers/assoc-resolvers with-defaults)
          (queries/assoc-queries with-defaults)
          (timezone/assoc-timezone-enums with-defaults)
-         (scalars/assoc-scalars with-defaults)))))
+         (scalars/assoc-scalars with-defaults)
+         (util/attach-resolvers (decorate-resolver-map resolver-map))))))
