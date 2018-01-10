@@ -1,0 +1,6 @@
+{:deps
+ {org.clojure/tools.logging {:mvn/version "0.4.0"}
+  com.walmartlabs/lacinia   {:mvn/version "0.6.0-rc-1"}
+  org.clojure/tools.cli     {:mvn/version "0.3.5"}
+  funcool/cuerdas           {:mvn/version "2.0.4"}
+  clojure.java-time         {:mvn/version "0.3.1"}}}

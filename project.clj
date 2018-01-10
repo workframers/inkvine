@@ -8,8 +8,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [com.walmartlabs/lacinia "0.24.0-rc-1"]
                  [clojure.java-time "0.3.1"]
-                 [org.clojure/tools.logging "0.4.0"]
-                 [camel-snake-kebab "0.4.0"]]
+                 [org.clojure/tools.logging "0.4.0"]]
 
   :source-paths ["src"]
 
