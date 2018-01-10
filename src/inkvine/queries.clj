@@ -1,6 +1,7 @@
 (ns inkvine.queries
   (:require [java-time :as jt]
-            [com.walmartlabs.lacinia.resolve :as resolve])
+            [com.walmartlabs.lacinia.resolve :as resolve]
+            [clojure.tools.logging :as log])
   (:import (com.walmartlabs.lacinia.resolve ResolverResult)
            (java.time ZoneOffset)))
 
@@ -20,7 +21,8 @@
 (defn inkvine-tz-query-schema
   [{:keys [:inkvine/timezone-enum-name :inkvine/tz-query-name]}]
   {:type        timezone-enum-name
-   :args        {:name {:type '(not-null String)}}
+   :args        {:name {:type '(non-null String)
+                        :description "String version of the timezone, ie `America/New_York`"}}
    :resolve     tz-query-name
    :description "Return the current time."})
 
@@ -35,7 +37,7 @@
    tz-query-name  inkvine-now-tz-resolver})
 
 (defn assoc-queries [schema options]
-  (let [{:keys [:inkvine/now-query-name tz-query-name]} options]
+  (let [{:keys [:inkvine/now-query-name :inkvine/tz-query-name]} options]
     (-> schema
         (assoc-in [:queries now-query-name] (inkvine-now-query-schema options))
         (assoc-in [:queries tz-query-name] (inkvine-tz-query-schema options)))))
