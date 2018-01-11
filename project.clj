@@ -6,7 +6,7 @@
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [com.walmartlabs/lacinia "0.24.0-rc-1"]
+                 [com.walmartlabs/lacinia "0.24.0-rc-2"]
                  [clojure.java-time "0.3.1"]
                  [org.clojure/tools.logging "0.4.0"]]
 
