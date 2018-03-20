@@ -55,7 +55,11 @@ SCREAMING_SNAKE_CASE enum values, so AMERICA_NEW_YORK and so on.
 
 * `:inkvine_now_utc`
 
-#### Why "inkvine"?
+## License
+
+Licensed under the EPL 2.0, see LICENSE.txt. Copyright (c) 2018 Workframe.
+
+## Why "inkvine"?
 
 In the _Dune_ novels, inkvine is used as a punishment device which leaves permanent
 marks on its recipients. This process is reminiscent of working with time and date
