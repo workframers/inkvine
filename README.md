@@ -55,7 +55,7 @@ SCREAMING_SNAKE_CASE enum values, so AMERICA_NEW_YORK and so on.
 
 * `:inkvine_now_utc`
 
-# License
+## License
 
 Copyright © 2018 Workframe, Inc.
 
